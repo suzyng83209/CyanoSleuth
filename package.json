@@ -23,6 +23,7 @@
     "javascript"
   ],
   "dependencies": {
+    "dotenv": "^4.0.0",
     "express": "^4.15.2",
     "react": "^15.5.4",
     "react-dom": "^15.5.4"
