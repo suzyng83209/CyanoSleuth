@@ -1,5 +1,12 @@
-div {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+@import '~antd/dist/antd.css';
+
+$color-primary: #39C2B2;
+
+#main {
+	color: #292929;
+}
+
+.ant-btn-primary {
+	background-color: $color-primary !important;
+	border-color: $color-primary !important;
 }

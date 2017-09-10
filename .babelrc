@@ -10,6 +10,8 @@
     "react"
   ],
   "plugins": [
-    "react-hot-loader/babel"
+    "react-hot-loader/babel",
+    "transform-class-properties",
+    ["import", { "libraryName": "antd", "style": true }]
   ]
 }
