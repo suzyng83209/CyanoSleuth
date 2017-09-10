@@ -1,10 +1,9 @@
 {
-  "name": "webpack-heroku-boilerplate",
+  "name": "cyanosleuth",
   "version": "1.0.0",
-  "description": "Simplest Heroku starter kit for React apps.",
+  "description": "",
   "main": "./src/entry.js",
-  "homepage": "https://github.com/wallacyyy/webpack-heroku",
-  "author": "Leonardo Couto",
+  "author": "",
   "license": "MIT",
   "theme": {
     "primary-color": "#39C2B2"
@@ -15,10 +14,6 @@
     "dev": "webpack-dev-server --hot --history-api-fallback --open",
     "toolbox": "react-toolbox-themr"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/wallacyyy/webpack-heroku.git"
-  },
   "keywords": [
     "react",
     "express",
@@ -28,15 +23,27 @@
   ],
   "dependencies": {
     "antd": "^2.13.0",
+    "babel-preset-stage-2": "^6.24.1",
     "dotenv": "^4.0.0",
     "express": "^4.15.2",
     "firebase": "^4.3.1",
     "firebaseui": "^2.3.0",
+    "leaflet": "^1.2.0",
+    "mapbox": "^1.0.0-beta9",
+    "mapbox-gl": "^0.39.1",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
+    "react-google-maps": "^7.1.0",
+    "react-leaflet": "^1.6.6",
+    "react-map-gl": "^3.0.4",
+    "react-mapbox-gl": "^2.4.0",
+    "react-router": "^3.0.1",
+    "react-sidebar": "^2.3.2",
+    "react-spinkit": "^3.0.0",
     "react-toolbox": "^2.0.0-beta.12",
     "styled-components": "^2.1.2",
-    "toolbox-loader": "0.0.3"
+    "toolbox-loader": "0.0.3",
+    "validator": "^8.2.0"
   },
   "devDependencies": {
     "babel-core": "^6.24.1",
