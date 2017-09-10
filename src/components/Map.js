@@ -43,6 +43,10 @@ class Map extends React.Component {
     };
   }
 
+  resize = () => {
+    this.setState({ width: window.innerWidth, height: window.innerHeight });
+  };
+
   componentDidMount = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(({ coords }) => {
@@ -54,6 +58,15 @@ class Map extends React.Component {
         });
       });
     }
+    window.addEventListener("resize", this.resize);
+  };
+
+  componentWillMount = () => {
+    this.resize();
+  };
+
+  componentWillUnmount = () => {
+    window.removeEventListener("resize", this.resize);
   };
 
   render() {

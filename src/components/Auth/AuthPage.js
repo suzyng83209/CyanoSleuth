@@ -1,5 +1,6 @@
 import React from "react";
 import isEmail from "validator/lib/isEmail";
+import { browserHistory } from "react-router";
 import Button from "antd/lib/button";
 import { Input } from "react-toolbox/lib/input";
 import { auth, ui, uiConfig } from "../../firebase";
@@ -31,6 +32,11 @@ class AuthorizationPage extends React.Component {
 
   componentDidMount = () => {
     ui.start("#firebaseui-auth", uiConfig);
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        browserHistory.push("/home");
+      }
+    });
   };
 
   componentWillUnmount = () => {

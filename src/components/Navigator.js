@@ -62,6 +62,8 @@ class Navigator extends React.Component {
       mql: mql,
       docked: props.docked,
       open: props.open,
+      longitude: null,
+      latitude: null,
       user: null
     };
   }
@@ -76,7 +78,6 @@ class Navigator extends React.Component {
   };
 
   componentDidMount = () => {
-    console.log(process.env.MapboxAccessToken);
     auth.onAuthStateChanged(user => {
       this.setState({ user });
     });
@@ -126,7 +127,7 @@ class Navigator extends React.Component {
 
     return (
       <Sidebar
-        sidebar={user ? this.renderSidebarContent() : <div>...</div>}
+        sidebar={user && this.renderSidebarContent()}
         open={sidebarOpen}
         docked={sidebarDocked}
         onSetOpen={this.onSetSidebarOpen}
