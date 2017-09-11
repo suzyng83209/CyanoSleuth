@@ -1,13 +1,22 @@
-@import '~antd/dist/antd.css';
-@import '~leaflet/dist/leaflet.css';
+@import "~antd/dist/antd.css";
+@import "~leaflet/dist/leaflet.css";
 
-$color-primary: #39C2B2;
+$color-primary: #39c2b2;
 
 #main {
-	color: #292929;
+  color: #292929;
 }
 
 .ant-btn-primary {
-	background-color: $color-primary !important;
-	border-color: $color-primary !important;
+  background-color: $color-primary !important;
+  border-color: $color-primary !important;
+}
+
+.ant-col-12 {
+  text-align: center;
+  & .ant-btn-lg {
+    height: 4em;
+	width: 90%;
+	font-size: 1.7em;
+  }
 }

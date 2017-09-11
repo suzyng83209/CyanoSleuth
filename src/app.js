@@ -7,13 +7,12 @@ import {
   browserHistory
 } from "react-router";
 import { auth } from './firebase';
-// import ThemeProvider from "react-toolbox/lib/ThemeProvider";
-// import theme from "./styles/react-toolbox/theme";
-// import "./styles/react-toolbox/theme.css";
 
 import Navigator from "./components/Navigator";
 import AuthPage from "./components/Auth/AuthPage";
 import Home from "./components/Home";
+
+import Sample from './components/Sample/Sample';
 
 import "./styles/app.scss";
 
@@ -33,7 +32,7 @@ export default class App extends React.Component {
         <Route path="/" component={Navigator} onEnter={checkAuth}>
           <IndexRedirect to="/home" />
           <Route path="home" component={Home} />
-          <Route path="sample" component={null} />
+          <Route path="sample" component={Sample} />
         </Route>
       </Router>
     );

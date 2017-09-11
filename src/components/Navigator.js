@@ -127,7 +127,7 @@ class Navigator extends React.Component {
 
     return (
       <Sidebar
-        sidebar={user && this.renderSidebarContent()}
+        sidebar={user ? this.renderSidebarContent() : " "}
         open={sidebarOpen}
         docked={sidebarDocked}
         onSetOpen={this.onSetSidebarOpen}

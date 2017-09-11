@@ -32,13 +32,13 @@ class Map extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      latitude: 42.886447,
-      longitude: -78.878369,
+      latitude: props.latitude || 42.886447,
+      longitude: props.longitude || -78.878369,
       zoom: 15,
       bearing: 0,
       pitch: 0,
-      width: window.innerWidth,
-      height: window.innerHeight,
+      width: props.width || window.innerWidth,
+      height: props.width || window.innerHeight,
       loading: true
     };
   }
