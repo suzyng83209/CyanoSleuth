@@ -10,7 +10,8 @@ import { auth } from './firebase';
 
 import Navigator from "./components/Navigator";
 import AuthPage from "./components/Auth/AuthPage";
-import Home from "./components/Home";
+import Map from "./components/Map";
+import ImageAnalysis from './components/Sample/ImageAnalysis';
 
 import Sample from './components/Sample/Sample';
 
@@ -31,8 +32,9 @@ export default class App extends React.Component {
         <Route path="/auth" component={AuthPage} />
         <Route path="/" component={Navigator} onEnter={checkAuth}>
           <IndexRedirect to="/home" />
-          <Route path="home" component={Home} />
+          <Route path="home" component={Map} />
           <Route path="sample" component={Sample} />
+          <Route path="test" component={ImageAnalysis} />
         </Route>
       </Router>
     );

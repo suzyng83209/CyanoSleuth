@@ -59,12 +59,16 @@ class SampleContainer extends React.Component {
     const { step } = this.state;
     return (
       <Container>
-        <div style={{ boxShadow: "0 6px 8px rgba(0, 0, 0, 0.2)", zIndex: '8' }}>
+        <div style={{ boxShadow: "0 6px 8px rgba(0, 0, 0, 0.2)", zIndex: "8" }}>
           <ProgressIndicator progress={step} />
           <Subtitle>Step {step + 1}</Subtitle>
           <Title>{progressTitles[step]}</Title>
         </div>
-        <div style={{ overflow: "hidden" }}>{this.props.children}</div>
+        <div style={{ overflow: "hidden" }}>
+          {React.Children.map(this.props.children, (child, index) => {
+            if (index === step) return React.cloneElement(child);
+          })}
+        </div>
         <ButtonWrapper>
           <Col span={12}>
             {step > 0 && (

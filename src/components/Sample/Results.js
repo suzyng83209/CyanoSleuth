@@ -1,3 +1,3 @@
 import React from "react";
 
-export default () => <div>asdfasdfafgasljghalksdfa</div>;
+export default () => <div>It's okay to swim!</div>;
