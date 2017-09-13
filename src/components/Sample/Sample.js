@@ -23,12 +23,13 @@ export default class SampleComponent extends React.Component {
       if (user) {
         const { colorData } = this.state;
         const { query } = this.props.location;
+        const now = new moment();
         var newDataKey = db
           .ref()
           .child("water-data")
           .push().key;
         var data = {
-          date: moment(),
+          date: now,
           uid: user.uid,
           email: user.email,
           nitrate60s: colorData[0],
