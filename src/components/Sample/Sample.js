@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import moment from 'moment';
+import moment from "moment";
 import SampleContainer from "./SampleContainer";
 import Instructions from "./Instructions";
 import ImageAnalysis from "./ImageAnalysis";
@@ -24,7 +24,8 @@ export default class SampleComponent extends React.Component {
         const { colorData } = this.state;
         const { query } = this.props.location;
         const now = moment();
-        db.ref("water-data/user/" + user.uid).set({
+        var updates = {};
+        updates["water-data/user/" + user.uid] = {
           date: now,
           uid: user.uid,
           email: user.email,
@@ -33,7 +34,8 @@ export default class SampleComponent extends React.Component {
           phosphate: colorData[2],
           bloom: null,
           coordinates: [query.lat, query.lng]
-        });
+        };
+        db.ref("water-data/user/" + user.uid).update(updates);
       } else {
         alert(
           "Your session has ended. Please log in again and re-submit your data."
