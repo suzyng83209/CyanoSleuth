@@ -13,7 +13,7 @@ exports.uploadFiles = function(files) {
     if (!file) return null;
     return cloudinary.v2.uploader.upload(file).then(result => result.public_id);
   });
-  return Promise.all(promises).then(publicIds => {
+  return new Promise.all(promises).then(publicIds => {
     console.log("Array of returned URLS", publicIds);
     return publicIds;
   });
@@ -25,14 +25,24 @@ exports.getColors = function(publicIds) {
     return cloudinary.api.resource(
       id,
       function(result) {
-        // result: { ..., colors: [ ... ,[hex, percent], ... ], ... }
-        return result.colors && result.colors[0]
-          ? { hex: result.colors[0][0], id: result.public_id }
-          : null;
+        return result;
       },
       { colors: true }
     );
   });
 
-  return Promise.all(promises);
+  return new Promise.all(promises).then(imgArray => {
+    var filteredImages = [];
+    for (var i = 0; i < imgArray.length; i += 1) {
+      var filteredImage = null;
+      if (imgArray[i]) {
+        filteredImage = {
+          id: imgArray[i].public_id,
+          hex: imgArray[i].colors[0][0]
+        };
+      }
+      filteredImages.push(filteredImage);
+    }
+    return filteredImages;
+  });
 };

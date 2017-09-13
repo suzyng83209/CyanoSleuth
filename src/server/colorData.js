@@ -1,4 +1,4 @@
-exports.nitrate_60s = {
+const nitrate_60s = {
   "#e2d6be": 0,
   "#e0cfc7": 1,
   "#ddaea6": 2,
@@ -8,7 +8,7 @@ exports.nitrate_60s = {
   "#ac325b": 50
 };
 
-exports.nitrate_30s = {
+const nitrate_30s = {
   "#e2d6be": 0,
   "#ad9f9f": 0.15,
   "#bba8ac": 0.3,
@@ -17,10 +17,19 @@ exports.nitrate_30s = {
   "#ea889f": 3
 };
 
-exports.phosphate = {
+const phosphate = {
   "#d7a09d": 0,
   "#cda3a4": 5,
   "#b6a49a": 15,
   "#b6afa7": 30,
   "#a0a398": 50
+};
+
+const ppms = [nitrate_60s, nitrate_30s, phosphate, null];
+
+module.exports = {
+  nitrate_60s: nitrate_60s,
+  nitrate_30s: nitrate_30s,
+  phosphate: phosphate,
+  ppms: ppms
 };

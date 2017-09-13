@@ -25,8 +25,8 @@ module.exports = {
       {
         test: /\.js?$/,
         loader: "babel-loader",
-        include: path.join(__dirname, "src"),
-        exclude: /node_modules\/(?!mapbox-gl\/js)/,        
+        include: [path.join(__dirname, "src"), path.join(__dirname, ".")],
+        exclude: /node_modules\/(?!mapbox-gl\/js)/
       },
       {
         test: /\.css?$/,

@@ -35,12 +35,13 @@ module.exports = {
       {
         test: /\.js?$/,
         loader: "babel-loader",
-        include: path.join(__dirname, "src")
+        include: [path.join(__dirname, "src"), path.join(__dirname, ".")],
+        exclude: /node_modules\/(?!mapbox-gl\/js)/
       },
       {
         test: /\.css?$/,
         loaders: ["style-loader", "css-loader?modules=true"],
-        include: path.join(__dirname, "node_modules")      
+        include: path.join(__dirname, "node_modules")
       },
       {
         test: /\.scss?$/,

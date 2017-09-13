@@ -1,32 +1,56 @@
 import React from "react";
 import axios from "axios";
+import moment from 'moment';
 import SampleContainer from "./SampleContainer";
 import Instructions from "./Instructions";
 import ImageAnalysis from "./ImageAnalysis";
 import Results from "./Results";
+import { db, auth } from "../../firebase";
 
 export default class SampleComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       step: 0,
-      imgData: [],  // nitrate60s, nitrate30s, phosphate, bloom
-      bloomData: null,
-      phosphateData: null,
-      nitrate30sData: null,
-      nitrate60sData: null
+      imgData: [], // nitrate60s, nitrate30s, phosphate, bloom
+      colorData: [],
+      saved: false
     };
   }
 
+  saveToDatabase = () => {
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        const { colorData } = this.state;
+        const { query } = this.props.location;
+        const now = moment();
+        db.ref("water-data/user/" + user.uid).set({
+          date: now,
+          uid: user.uid,
+          email: user.email,
+          nitrate60s: colorData[0],
+          nitrate30s: colorData[1],
+          phosphate: colorData[2],
+          bloom: null,
+          coordinates: [query.lat, query.lng]
+        });
+      } else {
+        alert(
+          "Your session has ended. Please log in again and re-submit your data."
+        );
+      }
+    });
+  };
+
   submit = () => {
-    const { lat, lng } = this.props.location.query;
     axios
       .post("/api/upload", {
-        imgData: this.state.imgData,
-        coordinates: { lat, lng }
+        imgData: this.state.imgData
       })
       .then(response => {
-        console.log(response);
+        console.log(response.data);
+        this.setState({ colorData: response.data });
+        this.saveToDatabase();
       });
   };
 
@@ -54,7 +78,14 @@ export default class SampleComponent extends React.Component {
     >
       <Instructions />
       <ImageAnalysis setImgData={this.setImgData} />
-      <Results />
+      <Results
+        loading={!this.state.saved}
+        bloomRisk={0}
+        toxinLevel={0}
+        algaeLevel={null}
+        nitrogenLevel={this.state.colorData.length && this.state.colorData[0]}
+        phosphorusLevel={this.state.colorData.length && this.state.colorData[2]}
+      />
     </SampleContainer>
   );
 }

@@ -1,10 +1,13 @@
 import React from "react";
+import axios from "axios";
+import moment from "moment";
+import { auth, db } from "../firebase";
 import Spin from "antd/lib/spin";
 import Button from "antd/lib/button";
-import { Link } from "react-router";
+import { Link, browserHistory } from "react-router";
 import Spinner from "react-spinkit";
 import styled from "styled-components";
-import { StaticMap, Marker } from "react-map-gl";
+import ReactMapGL, { Marker } from "react-map-gl";
 
 const accessToken =
   "pk.eyJ1Ijoic3V6eW5nODMyMDkiLCJhIjoiY2o3NzFjdmR6MTM5aTMzcDNoZWpiaDZqNSJ9.we3yNhQ6vDhcFuSpVoWNmA";
@@ -91,7 +94,11 @@ class Map extends React.Component {
       pitch: 0,
       width: props.width || window.innerWidth,
       height: props.width || window.innerHeight,
-      loading: true
+      loading: true,
+      lastUpdated: {
+        duration: 3,
+        format: "days"
+      }
     };
   }
 
@@ -111,6 +118,50 @@ class Map extends React.Component {
       });
     }
     window.addEventListener("resize", this.resize);
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        db
+          .ref("water-data/user/" + user.uid)
+          .once("value")
+          .then(snapshot => {
+            const lastUpdated = snapshot.val() && snapshot.val().date;
+            const timeDifference = moment.duration(
+              moment().diff(moment(lastUpdated))
+            );
+            if (timeDifference.asDays() > 1) {
+              this.setState({
+                lastUpdated: {
+                  duration: timeDifference.asDays(),
+                  format: "days"
+                }
+              });
+            } else if (timeDifference.asHours() > 1) {
+              this.setState({
+                lastUpdated: {
+                  duration: timeDifference.asHours(),
+                  format: "hours"
+                }
+              });
+            } else if (timeDifference.asMinutes() > 1) {
+              this.setState({
+                lastUpdated: {
+                  duration: timeDifference.asMinutes(),
+                  format: "minutes"
+                }
+              });
+            } else {
+              this.setState({
+                lastUpdated: {
+                  duration: timeDifference.asSeconds(),
+                  format: "seconds"
+                }
+              });
+            }
+          });
+      } else {
+        browserHistory.push("/auth");
+      }
+    });
   };
 
   componentWillMount = () => {
@@ -126,7 +177,7 @@ class Map extends React.Component {
     return (
       <div>
         <Spin size="large" spinning={loading}>
-          <StaticMap
+          <ReactMapGL
             {...this.state}
             mapboxApiAccessToken={accessToken}
             mapStyle="mapbox://styles/mapbox/streets-v9"
@@ -141,13 +192,16 @@ class Map extends React.Component {
                 </IconWrapper>
               </Marker>
             )}
-          </StaticMap>
+          </ReactMapGL>
         </Spin>
         <Description>
           <StatusContainer>
             <h2 style={{ textAlign: "left" }}>Current Status</h2>
             <Status>Safe to Swim</Status>
-            <div style={{ fontSize: "16px" }}>Last tested x hours ago</div>
+            <div style={{ fontSize: "16px" }}>
+              Last tested {this.state.lastUpdated.duration.toFixed(2)}{" "}
+              {this.state.lastUpdated.format} ago
+            </div>
           </StatusContainer>
           <Link to={`/sample?lat=${latitude}&lng=${longitude}`}>
             <Button type="primary" size="large" style={{ width: "100%" }}>

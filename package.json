@@ -36,6 +36,7 @@
     "leaflet": "^1.2.0",
     "mapbox": "^1.0.0-beta9",
     "mapbox-gl": "^0.39.1",
+    "moment": "^2.18.1",
     "react": "^15.5.4",
     "react-crop": "^4.0.2",
     "react-cropper": "^1.0.0",
