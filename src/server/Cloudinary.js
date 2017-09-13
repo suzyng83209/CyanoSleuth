@@ -25,7 +25,10 @@ exports.getColors = function(publicIds) {
     return cloudinary.api.resource(
       id,
       function(result) {
-        return result;
+        // result: { ..., colors: [ ... ,[hex, percent], ... ], ... }
+        return result.colors && result.colors[0]
+          ? { hex: result.colors[0][0], id: result.public_id }
+          : null;
       },
       { colors: true }
     );

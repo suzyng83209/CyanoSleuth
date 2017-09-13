@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 import SampleContainer from "./SampleContainer";
 import Instructions from "./Instructions";
 import ImageAnalysis from "./ImageAnalysis";
@@ -9,27 +10,30 @@ export default class SampleComponent extends React.Component {
     super(props);
     this.state = {
       step: 0,
-      imgData: [],
+      imgData: [],  // nitrate60s, nitrate30s, phosphate, bloom
       bloomData: null,
-      nitrogenData: null,
-      phosphorusData: null
+      phosphateData: null,
+      nitrate30sData: null,
+      nitrate60sData: null
     };
   }
 
   submit = () => {
-    const imgData = [
-      this.state[NITROGEN],
-      this.state[PHOSPHORUS],
-      this.state[BLOOM]
-    ];
+    const { lat, lng } = this.props.location.query;
     axios
-      .post("/api/upload", { imgData: this.state.imgData })
-      .then((response) => {
+      .post("/api/upload", {
+        imgData: this.state.imgData,
+        coordinates: { lat, lng }
+      })
+      .then(response => {
         console.log(response);
       });
   };
 
   increaseStep = () => {
+    if (this.state.step === 1) {
+      this.submit();
+    }
     this.setState({ step: this.state.step + 1 });
   };
 

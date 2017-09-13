@@ -1,14 +1,14 @@
 import React from "react";
-import axios from "axios";
 import Icon from "antd/lib/icon";
 import Button from "antd/lib/button";
 import styled from "styled-components";
 import Cropper from "react-cropper";
 import "cropperjs/dist/cropper.css";
 
-const NITROGEN = "Nitrogen data";
-const PHOSPHORUS = "Phosphorus data";
-const BLOOM = "Bloom data";
+const N60 = "60s nitrate";
+const N30 = "30s nitrate";
+const P = "phosphorus";
+const B = "bloom";
 
 const Container = styled.div``;
 
@@ -116,11 +116,12 @@ export default class ImageAnalysis extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      file: null,
       active: null,
-      [BLOOM]: null,
-      [NITROGEN]: null,
-      [PHOSPHORUS]: null
+      file: null,
+      [B]: null,
+      [P]: null,
+      [N30]: null,
+      [N60]: null
     };
   }
 
@@ -129,18 +130,15 @@ export default class ImageAnalysis extends React.Component {
       [this.state.active]: this.cropper.getCroppedCanvas().toDataURL()
     });
     this.props.setImgData([
-      this.state[NITROGEN],
-      this.state[PHOSPHORUS],
-      this.state[BLOOM]
+      this.state[N60],
+      this.state[N30],
+      this.state[P],
+      this.state[B]
     ]);
   };
 
   componentDidMount = () => {
-    this.props.setImgData([
-      this.state[NITROGEN],
-      this.state[PHOSPHORUS],
-      this.state[BLOOM]
-    ]);
+    this.props.setImgData([null, null, null, null]);
   };
 
   handleInputChange = e => {
@@ -207,28 +205,36 @@ export default class ImageAnalysis extends React.Component {
         )}
         <ImagePreviewContainer disable={!preview}>
           <ImagePreview
-            active={active === NITROGEN}
+            active={active === N60}
             onBlur={this.handleButtonBlur}
-            onClick={() => this.handleButtonFocus(NITROGEN)}
+            onClick={() => this.handleButtonFocus(N60)}
           >
-            <ImageCrop srcUrl={this.state[NITROGEN]} name={NITROGEN} />
-            <Label active={active === NITROGEN}>Nitrogen</Label>
+            <ImageCrop srcUrl={this.state[N60]} name={N60} />
+            <Label active={active === N60}>60s Nitrate</Label>
           </ImagePreview>
           <ImagePreview
-            active={active === PHOSPHORUS}
+            active={active === N30}
             onBlur={this.handleButtonBlur}
-            onClick={() => this.handleButtonFocus(PHOSPHORUS)}
+            onClick={() => this.handleButtonFocus(N30)}
           >
-            <ImageCrop srcUrl={this.state[PHOSPHORUS]} name={PHOSPHORUS} />
-            <Label active={active === PHOSPHORUS}>Phosphorus</Label>
+            <ImageCrop srcUrl={this.state[N30]} name={N30} />
+            <Label active={active === N30}>30s Nitrate</Label>
+          </ImagePreview>
+          <ImagePreview
+            active={active === P}
+            onBlur={this.handleButtonBlur}
+            onClick={() => this.handleButtonFocus(P)}
+          >
+            <ImageCrop srcUrl={this.state[P]} name={P} />
+            <Label active={active === P}>Phosphate</Label>
           </ImagePreview>
           <ImagePreview
             disable={true}
             onBlur={this.handleButtonBlur}
-            onClick={() => this.handleButtonFocus(BLOOM)}
+            onClick={() => this.handleButtonFocus(B)}
           >
-            <ImageCrop srcUrl={this.state[BLOOM]} name={BLOOM} />
-            <Label active={active === BLOOM}>Algal Bloom</Label>
+            <ImageCrop srcUrl={this.state[B]} name={B} />
+            <Label active={active === B}>Algal Bloom</Label>
           </ImagePreview>
         </ImagePreviewContainer>
       </div>
