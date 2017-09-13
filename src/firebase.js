@@ -11,7 +11,7 @@ export const config = {
 };
 
 export const uiConfig = {
-  signInSuccessUrl: "localhost:8080/home",
+  signInSuccessUrl: "app.cyanosleuth.com/home",
   signInOptions: [
     firebase.auth.GoogleAuthProvider.PROVIDER_ID,
     firebase.auth.FacebookAuthProvider.PROVIDER_ID
