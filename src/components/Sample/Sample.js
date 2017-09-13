@@ -23,7 +23,7 @@ export default class SampleComponent extends React.Component {
       if (user) {
         const { colorData } = this.state;
         const { query } = this.props.location;
-        const now = moment().format('YYYY:MM:DD HH:MM:SS');
+        const now = moment().format("YYYY:MM:DD HH:MM:SS");
         var newDataKey = db
           .ref()
           .child("water-data")
@@ -38,7 +38,10 @@ export default class SampleComponent extends React.Component {
           bloom: null,
           coordinates: [query.lat, query.lng]
         };
-        db.ref("water-data/" + newDataKey).set(data);
+        db
+          .ref("water-data/" + newDataKey)
+          .set(data)
+          .then(() => this.setState({ saved: true }));
       } else {
         alert(
           "Your session has ended. Please log in again and re-submit your data."
