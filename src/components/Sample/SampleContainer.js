@@ -9,25 +9,24 @@ import ProgressIndicator from "./ProgressIndicator";
 const Subtitle = styled.h3`
   border-top: 1px solid #dddddd;
   margin: 0 10%;
-  padding: 12px;
-  padding-bottom: 0;
+  padding: 8px 12px 0;
   color: #565656;
-  font-size: 1.5em;
+  font-size: 1.2em;
 `;
 
 const Title = styled.h1`
   margin: 0 10%;
-  padding: 0 12px 16px;
+  padding: 0 12px 8px;
   color: #39c2b2;
   font-weight: 300;
-  font-size: 3em;
+  font-size: 2.4em;
 `;
 
 const ButtonWrapper = styled.div`
   width: 100%;
-  padding: 4em;
+  padding: 2em;
   z-index: 8;
-  box-shadow: 0 -6px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
 `;
 
 const Container = styled.div`
@@ -40,46 +39,40 @@ const Container = styled.div`
 const progressTitles = ["Take Sample", "Scan Sample", "Test Results"];
 
 class SampleContainer extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      step: 0
-    };
-  }
-
-  increaseStep = () => {
-    this.setState({ step: this.state.step + 1 });
-  };
-
-  decreaseStep = () => {
-    this.setState({ step: this.state.step - 1 });
-  };
-
   render = () => {
-    const { step } = this.state;
+    const { step, increase, decrease, hasData, children } = this.props;
     return (
       <Container>
-        <div style={{ boxShadow: "0 6px 8px rgba(0, 0, 0, 0.2)", zIndex: "8" }}>
+        <div style={{ boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)", zIndex: "8" }}>
           <ProgressIndicator progress={step} />
           <Subtitle>Step {step + 1}</Subtitle>
           <Title>{progressTitles[step]}</Title>
         </div>
-        <div style={{ overflow: "hidden" }}>
-          {React.Children.map(this.props.children, (child, index) => {
+        <div style={{ overflow: "scroll", height: "100%" }}>
+          {React.Children.map(children, (child, index) => {
             if (index === step) return React.cloneElement(child);
           })}
         </div>
         <ButtonWrapper>
           <Col span={12}>
-            {step > 0 && (
-              <Button size="large" onClick={this.decreaseStep}>
+            {step > 0 ? (
+              <Button size="large" onClick={decrease}>
                 Back
               </Button>
+            ) : (
+              <Link to="home">
+                <Button size="large">Back</Button>
+              </Link>
             )}
           </Col>
           <Col span={12}>
             {step < 2 ? (
-              <Button size="large" type="primary" onClick={this.increaseStep}>
+              <Button
+                size="large"
+                type="primary"
+                onClick={increase}
+                disabled={step === 1 && !hasData}
+              >
                 Next
               </Button>
             ) : (

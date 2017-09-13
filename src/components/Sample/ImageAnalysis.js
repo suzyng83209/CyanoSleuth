@@ -1,14 +1,16 @@
 import React from "react";
-import axios from 'axios';
+import axios from "axios";
+import Icon from "antd/lib/icon";
+import Button from "antd/lib/button";
 import styled from "styled-components";
 import Cropper from "react-cropper";
-import "cropperjs/dist/cropper.css"; // see installation section above for versions of NPM older than 3.0.0
-// If you choose not to use import, you need to assign Cropper to default
-// var Cropper = require('react-cropper').default
+import "cropperjs/dist/cropper.css";
 
 const NITROGEN = "Nitrogen data";
 const PHOSPHORUS = "Phosphorus data";
 const BLOOM = "Bloom data";
+
+const Container = styled.div``;
 
 const ImageUpload = styled.div`
   height: 50%;
@@ -16,18 +18,28 @@ const ImageUpload = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
+  font-size: 2em !important;
   background: lightgrey;
   cursor: pointer;
-  font-size: 2em;
   color: white;
   &:active {
     background: grey;
   }
 `;
 
+const Placeholder = ImageUpload.extend`
+  background: white;
+  cursor: default;
+  color: lightgrey;
+  &:active {
+    background: white;
+  }
+`;
+
 const ImagePreview = styled.div`
-  height: 160px;
-  width: 160px;
+  height: 128px;
+  width: 128px;
   color: ${props => (props.disable ? "grey" : "#565656")};
   cursor: ${props => (props.disable ? "not-allowed" : "pointer")};
   border: 4px solid ${props => (props.active ? "#39c2b2" : "lightgrey")};
@@ -50,18 +62,26 @@ const Label = styled.div`
   position: relative;
   text-align: center;
   top: 30%;
-  font-size: 1.2em;
+  font-size: 1em;
   text-transform: uppercase;
   font-family: "Expletus Sans";
   color: ${props => (props.active ? "#39c2b2" : "#565656")};
 `;
 
 const imageStyles = {
-  height: "100%",
   width: "100%",
-  textAlign: "center",
+  height: "100%",
   display: "flex",
+  textAlign: "center",
   alignItems: "center"
+};
+
+const cropperStyles = {
+  width: "100%",
+  height: "50%",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center"
 };
 
 const ImageCrop = ({ srcUrl, name }) =>
@@ -75,16 +95,32 @@ const ImageCrop = ({ srcUrl, name }) =>
     <div style={imageStyles}>Click to select {name} test area</div>
   );
 
-export default class Demo extends React.Component {
+const ImagePreviewContainer = ({ disable, children }) => {
+  return (
+    !disable && (
+      <div
+        style={{
+          height: "50%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-around"
+        }}
+      >
+        {children}
+      </div>
+    )
+  );
+};
+
+export default class ImageAnalysis extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      src: null,
       file: null,
+      active: null,
       [BLOOM]: null,
       [NITROGEN]: null,
-      [PHOSPHORUS]: null,
-      active: NITROGEN
+      [PHOSPHORUS]: null
     };
   }
 
@@ -92,6 +128,19 @@ export default class Demo extends React.Component {
     this.setState({
       [this.state.active]: this.cropper.getCroppedCanvas().toDataURL()
     });
+    this.props.setImgData([
+      this.state[NITROGEN],
+      this.state[PHOSPHORUS],
+      this.state[BLOOM]
+    ]);
+  };
+
+  componentDidMount = () => {
+    this.props.setImgData([
+      this.state[NITROGEN],
+      this.state[PHOSPHORUS],
+      this.state[BLOOM]
+    ]);
   };
 
   handleInputChange = e => {
@@ -122,27 +171,10 @@ export default class Demo extends React.Component {
     this.input.click();
   };
 
-  submit = () => {
-    axios.post('/api/upload', {
-      firstName: 'Fred',
-      lastName: 'Flintstone'
-    })
-    .then(function (response) {
-      console.log(response);
-    })
-  }
-
   render() {
-    const { active, preview } = this.state;
-    const cropperStyles = {
-      height: "50%",
-      width: "100%",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center"
-    };
+    const { active, preview, file } = this.state;
     return (
-      <div>
+      <div style={{ height: "100%" }}>
         <input
           type="file"
           id="input"
@@ -162,11 +194,18 @@ export default class Demo extends React.Component {
             viewMode={3}
           />
         ) : (
-          <ImageUpload onClick={this.loadImage}>
-            Upload an Image and Isolate Your Results
-          </ImageUpload>
+          <div>
+            <ImageUpload onClick={this.loadImage}>
+              <div style={{ margin: "2em 0 0.5em" }}>Upload an Image</div>
+              <Icon type="upload" />
+            </ImageUpload>
+            <Placeholder>
+              <Icon type="api" />
+              <div style={{ margin: "0.5em 0 2em" }}>Analyse the Data</div>
+            </Placeholder>
+          </div>
         )}
-        <div style={{ display: "flex", justifyContent: "space-around" }}>
+        <ImagePreviewContainer disable={!preview}>
           <ImagePreview
             active={active === NITROGEN}
             onBlur={this.handleButtonBlur}
@@ -191,8 +230,7 @@ export default class Demo extends React.Component {
             <ImageCrop srcUrl={this.state[BLOOM]} name={BLOOM} />
             <Label active={active === BLOOM}>Algal Bloom</Label>
           </ImagePreview>
-        </div>
-        <div onClick={this.submit}>test submit</div>
+        </ImagePreviewContainer>
       </div>
     );
   }

@@ -5,7 +5,7 @@ const Polygon = styled.div`
   position: relative;
   height: 1em;
   width: 20%;
-  margin: 1.5em;
+  margin: 1em 1.5em;
   background: ${props => (props.progress >= 1 ? "#39c2b2" : "lightgrey")};
 `;
 

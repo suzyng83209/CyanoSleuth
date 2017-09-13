@@ -30,6 +30,14 @@ const UserContainer = styled.div`
   }
 `;
 
+const UserInfo = styled.div`
+  * {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+`;
+
 const ListItem = styled.div`
   padding: 24px;
   color: grey;
@@ -95,14 +103,14 @@ class Navigator extends React.Component {
     <SidebarContainer>
       <UserContainer>
         <img src={this.state.user.photoURL} alt="User" />
-        <div>
+        <UserInfo>
           <h1>{this.state.user.displayName}</h1>
-          <p>
-            <Icon type="mail" style={{ margin: "4px 4px 8px 0" }} />
+          <p style={{ margin: "4px 0 8px" }}>
+            <Icon type="mail" style={{ marginRight: "4px" }} />
             {this.state.user.email}
           </p>
           <h3>Citizen Scientist</h3>
-        </div>
+        </UserInfo>
       </UserContainer>
       <ListItem>
         <p>Purchase more test kits</p>
