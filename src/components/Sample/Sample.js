@@ -23,9 +23,11 @@ export default class SampleComponent extends React.Component {
       if (user) {
         const { colorData } = this.state;
         const { query } = this.props.location;
-        const now = moment();
-        var updates = {};
-        updates["water-data/user/" + user.uid] = {
+        var newDataKey = db
+          .ref()
+          .child("water-data")
+          .push().key;
+        var data = {
           date: now,
           uid: user.uid,
           email: user.email,
@@ -35,7 +37,7 @@ export default class SampleComponent extends React.Component {
           bloom: null,
           coordinates: [query.lat, query.lng]
         };
-        db.ref("water-data/user/" + user.uid).update(updates);
+        db.ref("water-data/" + newDataKey).set(data);
       } else {
         alert(
           "Your session has ended. Please log in again and re-submit your data."

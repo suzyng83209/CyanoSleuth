@@ -97,7 +97,7 @@ class Map extends React.Component {
       loading: true,
       lastUpdated: {
         duration: 3,
-        format: "days"
+        format: "hours"
       }
     };
   }
@@ -120,44 +120,41 @@ class Map extends React.Component {
     window.addEventListener("resize", this.resize);
     auth.onAuthStateChanged(user => {
       if (user) {
-        db
-          .ref("water-data/user/" + user.uid)
-          .once("value")
-          .then(snapshot => {
-            const lastUpdated = snapshot.val() && snapshot.val().date;
-            const timeDifference = moment.duration(
-              moment().diff(moment(lastUpdated))
-            );
-            if (timeDifference.asDays() > 1) {
-              this.setState({
-                lastUpdated: {
-                  duration: timeDifference.asDays(),
-                  format: "days"
-                }
-              });
-            } else if (timeDifference.asHours() > 1) {
-              this.setState({
-                lastUpdated: {
-                  duration: timeDifference.asHours(),
-                  format: "hours"
-                }
-              });
-            } else if (timeDifference.asMinutes() > 1) {
-              this.setState({
-                lastUpdated: {
-                  duration: timeDifference.asMinutes(),
-                  format: "minutes"
-                }
-              });
-            } else {
-              this.setState({
-                lastUpdated: {
-                  duration: timeDifference.asSeconds(),
-                  format: "seconds"
-                }
-              });
-            }
-          });
+        db.ref("water-data/").on("child_added", data => {
+          const lastUpdated = data.val() && data.val().date;
+          const timeDifference = moment.duration(
+            moment().diff(moment(lastUpdated))
+          );
+          if (timeDifference.asDays() > 1) {
+            this.setState({
+              lastUpdated: {
+                duration: timeDifference.asDays(),
+                format: "days"
+              }
+            });
+          } else if (timeDifference.asHours() > 1) {
+            this.setState({
+              lastUpdated: {
+                duration: timeDifference.asHours(),
+                format: "hours"
+              }
+            });
+          } else if (timeDifference.asMinutes() > 1) {
+            this.setState({
+              lastUpdated: {
+                duration: timeDifference.asMinutes(),
+                format: "minutes"
+              }
+            });
+          } else {
+            this.setState({
+              lastUpdated: {
+                duration: timeDifference.asSeconds(),
+                format: "seconds"
+              }
+            });
+          }
+        });
       } else {
         browserHistory.push("/auth");
       }
