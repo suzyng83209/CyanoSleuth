@@ -112,10 +112,8 @@ export default class Results extends React.Component {
     };
   }
 
-  componentDidUpdate = prevProps => {
-    if (!prevProps.loading) {
-      this.setState({ loading: false });
-    }
+  componentWillReceiveProps = nextProps => {
+    this.setState({ loading: nextProps.loading });
   };
 
   render = () => {
