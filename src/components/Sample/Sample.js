@@ -28,7 +28,7 @@ export default class SampleComponent extends React.Component {
           .child("water-data")
           .push().key;
         var data = {
-          date: now,
+          date: moment(),
           uid: user.uid,
           email: user.email,
           nitrate60s: colorData[0],
