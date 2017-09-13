@@ -103,6 +103,7 @@ export default class Results extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      loading: props.loading,
       bloomRisk: props.bloomRisk,
       toxinLevel: props.toxinLevel,
       algaeLevel: props.algaeLevel,
@@ -110,6 +111,12 @@ export default class Results extends React.Component {
       phosphorusLevel: props.phosphorusLevel
     };
   }
+
+  componentDidUpdate = prevProps => {
+    if (!prevProps.loading) {
+      this.setState({ loading: false });
+    }
+  };
 
   render = () => {
     const {
@@ -119,7 +126,7 @@ export default class Results extends React.Component {
       nitrogenLevel,
       phosphorusLevel
     } = this.state;
-    if (this.props.loading)
+    if (this.state.loading)
       return (
         <div
           style={{
