@@ -23,7 +23,7 @@ export default class SampleComponent extends React.Component {
       if (user) {
         const { colorData } = this.state;
         const { query } = this.props.location;
-        const now = new moment();
+        const now = moment().format('YYYY:MM:DD HH:MM:SS');
         var newDataKey = db
           .ref()
           .child("water-data")
